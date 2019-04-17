@@ -85,8 +85,8 @@ defmodule ExVatcheck.VIESClient.XMLParserTest do
         vat_number: "123123123",
         request_date: "2016-01-16+01:00",
         valid: false,
-        name: nil,
-        address: nil
+        name: "---",
+        address: "---"
       }
 
       assert XMLParser.parse_response(response) == {:ok, expected}

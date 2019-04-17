@@ -8,8 +8,8 @@ defmodule ExVatcheck.VIESClient.XMLParser do
           vat_number: binary,
           request_date: binary,
           valid: boolean,
-          name: binary | nil,
-          address: binary | nil
+          name: binary,
+          address: binary
         }
 
   @check_vat_service_url SweetXml.sigil_x(
@@ -78,7 +78,7 @@ defmodule ExVatcheck.VIESClient.XMLParser do
     </soap:Body>
   </soap:Envelope>
   """
-  @spec parse_response(binary) :: {atom, binary}
+  @spec parse_response(binary) :: {:ok, map} | {:error, binary}
   def parse_response(response_body) do
     if fault = SweetXml.xpath(response_body, @check_vat_fault) do
       {:error, fault |> to_string() |> format_fault()}
@@ -95,8 +95,8 @@ defmodule ExVatcheck.VIESClient.XMLParser do
       vat_number: to_string(body.vat_number),
       request_date: to_string(body.request_date),
       valid: body.valid == 'true',
-      name: body.name |> to_string() |> cleanse_dashes(),
-      address: body.address |> to_string() |> cleanse_dashes()
+      name: body.name |> to_string(),
+      address: body.address |> to_string()
     }
   end
 
@@ -108,8 +108,4 @@ defmodule ExVatcheck.VIESClient.XMLParser do
       "Unexpected error: #{fault}"
     end
   end
-
-  @spec cleanse_dashes(binary) :: binary
-  defp cleanse_dashes("---"), do: nil
-  defp cleanse_dashes(string), do: string
 end

@@ -1,18 +1,37 @@
 defmodule ExVatcheck do
   @moduledoc """
-  Documentation for ExVatcheck.
+  ExVatcheck is a library for validating VAT identification numbers using the
+  VIES service (http://ec.europa.eu/taxation_customs/vies/). Because the VIES
+  service is not always reliable, and is frequently unavailable, ExVatcheck
+  falls back to Regex in the case when the service can't be reached.
   """
 
-  @doc """
-  Hello world.
+  alias ExVatcheck.{Countries, VAT, VIESClient}
 
-  ## Examples
+  @spec check(binary) :: VAT.t()
+  def check(vat) do
+    if vat |> VAT.normalize() |> Countries.valid_format?() do
+      validate(vat)
+    else
+      %VAT{}
+    end
+  end
 
-      iex> ExVatcheck.hello()
-      :world
+  @spec validate(binary) :: VAT.t()
+  defp validate(<<country::binary-size(2), number::binary>>) do
+    {:ok, client} = VIESClient.new()
 
-  """
-  def hello do
-    :world
+    case VIESClient.check_vat(client, country, number) do
+      {:ok, response} ->
+        %VAT{
+          valid: response.valid,
+          exists: response.valid,
+          vies_available: true,
+          vies_response: response
+        }
+
+      {:error, _error} ->
+        %VAT{valid: true}
+    end
   end
 end

@@ -3,6 +3,27 @@
 An Elixir Package for verifying VAT identification numbers using the
 [VIES](http://ec.europa.eu/taxation_customs/vies/) service.
 
+## Usage
+
+To validate a VAT identification number, simply run:
+
+```elixir
+iex(1)> ExVatcheck.check("GB333289454")
+%ExVatcheck.VAT{
+  exists: true,
+  valid: true,
+  vies_available: true,
+  vies_response: %{
+    address: "BC0 B1 D1 BROADCAST CENTRE\nWHITE CITY PLACE\n201 WOOD LANE\nLONDON\n\nW12 7TP",
+    country_code: "GB",
+    name: "BRITISH BROADCASTING CORPORATION",
+    request_date: "2019-04-06+02:00",
+    valid: true,
+    vat_number: "333289454"
+  }
+}
+```
+
 ## Installation
 
 If [available in Hex](https://hex.pm/docs/publish), the package can be installed

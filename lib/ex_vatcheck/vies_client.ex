@@ -14,7 +14,8 @@ defmodule ExVatcheck.VIESClient do
           url: binary
         }
 
-  @spec check_vat(t(), binary, binary) :: {:ok, XMLParser.response()} | {:error, any}
+  @spec check_vat(t(), binary, binary) ::
+          {:ok, map} | {:error, binary} | {:error, HTTPoison.Error.t()}
   def check_vat(client, country_code, vat_number) do
     req_body = vat_request(country_code, vat_number)
 
