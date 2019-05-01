@@ -63,11 +63,11 @@ defmodule ExVatcheckTest do
         valid: true,
         exists: false,
         vies_available: false,
-        vies_response: %{}
+        vies_response: %{error: "Service timed out"}
       }
 
       stub(HTTPoison, :post, fn _, _ ->
-        {:error, %HTTPoison.Error{reason: "Service unavailable"}}
+        {:error, %HTTPoison.Error{reason: :timeout}}
       end)
 
       assert ExVatcheck.check("GB333289454") == expected

@@ -44,7 +44,7 @@ defmodule ExVatcheck.VIESClient.XMLParser do
   @spec parse_service(binary) :: {:ok, binary} | {:error, binary}
   def parse_service(wsdl_response) do
     case SweetXml.xpath(wsdl_response, @check_vat_service_url) do
-      nil -> {:error, wsdl_response}
+      nil -> {:error, :invalid_wsdl}
       url -> {:ok, to_string(url)}
     end
   end
@@ -105,7 +105,7 @@ defmodule ExVatcheck.VIESClient.XMLParser do
     if String.contains?(fault, "MS_UNAVAILABLE") do
       "Service unavailable"
     else
-      "Unexpected error: #{fault}"
+      "Unknown error: #{fault}"
     end
   end
 end

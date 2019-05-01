@@ -19,19 +19,20 @@ defmodule ExVatcheck do
 
   @spec validate(binary) :: VAT.t()
   defp validate(<<country::binary-size(2), number::binary>>) do
-    {:ok, client} = VIESClient.new()
-
-    case VIESClient.check_vat(client, country, number) do
-      {:ok, response} ->
+    with {:ok, client} <- VIESClient.new(),
+         {:ok, response} <- VIESClient.check_vat(client, country, number) do
+      %VAT{
+        valid: response.valid,
+        exists: response.valid,
+        vies_available: true,
+        vies_response: response
+      }
+    else
+      {:error, error} ->
         %VAT{
-          valid: response.valid,
-          exists: response.valid,
-          vies_available: true,
-          vies_response: response
+          valid: true,
+          vies_response: %{error: error}
         }
-
-      {:error, _error} ->
-        %VAT{valid: true}
     end
   end
 end

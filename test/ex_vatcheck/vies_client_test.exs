@@ -17,12 +17,12 @@ defmodule ExVatcheck.VIESClientTest do
       assert VIESClient.new() == {:ok, %VIESClient{url: VIESResponses.service_url()}}
     end
 
-    test "errors on HTTPoison error" do
-      error = {:error, %HTTPoison.Error{id: nil, reason: :unexpected_error}}
+    test "errors on VIES timeout" do
+      stub(HTTPoison, :get, fn _ ->
+        {:error, %HTTPoison.Error{id: nil, reason: :timeout}}
+      end)
 
-      stub(HTTPoison, :get, fn _ -> error end)
-
-      assert VIESClient.new() == error
+      assert VIESClient.new() == {:error, "Service timed out"}
     end
 
     test "error when invalid WSDL XML returned" do
@@ -30,7 +30,15 @@ defmodule ExVatcheck.VIESClientTest do
         {:ok, %HTTPoison.Response{body: VIESResponses.invalid_wsdl()}}
       end)
 
-      assert VIESClient.new() == {:error, VIESResponses.invalid_wsdl()}
+      assert VIESClient.new() == {:error, "Unknown error: invalid_wsdl"}
+    end
+
+    test "errors on HTTPoison error" do
+      stub(HTTPoison, :get, fn _ ->
+        {:error, %HTTPoison.Error{id: nil, reason: :unexpected_error}}
+      end)
+
+      assert VIESClient.new() == {:error, "Unknown error: unexpected_error"}
     end
   end
 
@@ -81,6 +89,16 @@ defmodule ExVatcheck.VIESClientTest do
       end)
 
       assert VIESClient.check_vat(client, "GB", "123123123") == {:error, "Service unavailable"}
+    end
+
+    test "gracefully handles VIES service timeouts" do
+      client = %VIESClient{url: VIESResponses.service_url()}
+
+      stub(HTTPoison, :post, fn _, _ ->
+        {:error, %HTTPoison.Error{id: nil, reason: :timeout}}
+      end)
+
+      assert VIESClient.check_vat(client, "GB", "123123123") == {:error, "Service timed out"}
     end
   end
 end

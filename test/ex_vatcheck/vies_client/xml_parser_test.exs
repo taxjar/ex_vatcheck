@@ -31,7 +31,7 @@ defmodule ExVatcheck.VIESClient.XMLParserTest do
       </wsdl:definitions>
       """
 
-      assert XMLParser.parse_service(response) == {:error, response}
+      assert XMLParser.parse_service(response) == {:error, :invalid_wsdl}
     end
   end
 
@@ -117,7 +117,7 @@ defmodule ExVatcheck.VIESClient.XMLParserTest do
         </soap:Envelope>
       """
 
-      assert XMLParser.parse_response(fault) == {:error, "Unexpected error: XML_ERROR"}
+      assert XMLParser.parse_response(fault) == {:error, "Unknown error: XML_ERROR"}
     end
   end
 end

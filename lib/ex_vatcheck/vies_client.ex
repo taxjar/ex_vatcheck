@@ -21,7 +21,7 @@ defmodule ExVatcheck.VIESClient do
 
     case HTTPoison.post(client.url, req_body) do
       {:ok, response} -> XMLParser.parse_response(response.body)
-      error -> {:error, error}
+      {:error, %HTTPoison.Error{reason: :timeout}} -> {:error, "Service timed out"}
     end
   end
 
@@ -30,6 +30,10 @@ defmodule ExVatcheck.VIESClient do
     with {:ok, response} <- HTTPoison.get(@wsdl_url),
          {:ok, url} <- XMLParser.parse_service(response.body) do
       {:ok, %__MODULE__{url: url}}
+    else
+      {:error, %HTTPoison.Error{reason: :timeout}} -> {:error, "Service timed out"}
+      {:error, :invalid_wsdl} -> {:error, "Unknown error: invalid_wsdl"}
+      {:error, error} -> {:error, "Unknown error: #{error.reason}"}
     end
   end
 
