@@ -13,6 +13,7 @@ defmodule ExVatcheck.MixProject do
       start_permanent: Mix.env() == :prod,
       deps: deps(),
       docs: docs(),
+      package: package(),
       test_coverage: [tool: ExCoveralls],
       preferred_cli_env: [
         coveralls: :test,
@@ -44,6 +45,17 @@ defmodule ExVatcheck.MixProject do
   defp docs do
     [
       main: "ExVatcheck"
+    ]
+  end
+
+  defp package do
+    [
+      files: ["lib", "LICENSE", "mix.exs", "README.md"],
+      maintainers: ["TaxJar"],
+      licenses: ["MIT"],
+      links: %{
+        "github" => "https://github.com/taxjar/ex_vatcheck"
+      }
     ]
   end
 
