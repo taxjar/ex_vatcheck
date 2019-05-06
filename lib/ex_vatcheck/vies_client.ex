@@ -16,6 +16,14 @@ defmodule ExVatcheck.VIESClient do
 
   @spec check_vat(t(), binary, binary) ::
           {:ok, map} | {:error, binary} | {:error, HTTPoison.Error.t()}
+  @doc ~S"""
+  Queries the VIES service to determine whether or not the provided VAT
+  identification number is valid.
+
+  Returns `{:ok, response}` in the case of a successful call to the service, and
+  `{:error, error}` in the case that the service could not be reached or the XML
+  response could not be parsed.
+  """
   def check_vat(client, country_code, vat_number) do
     req_body = vat_request(country_code, vat_number)
 
@@ -26,6 +34,11 @@ defmodule ExVatcheck.VIESClient do
   end
 
   @spec new() :: {:ok, t()} | {:error, any}
+  @doc ~S"""
+  Returns a new VIES client struct which can be used to make requests in
+  `check_vat/3`. If the VIES service times out, or if invalid WSDL is returned
+  and the checkVat service URL cannot be parsed, an error is returned.
+  """
   def new() do
     with {:ok, response} <- HTTPoison.get(@wsdl_url),
          {:ok, url} <- XMLParser.parse_service(response.body) do

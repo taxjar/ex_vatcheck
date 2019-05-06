@@ -67,6 +67,13 @@ defmodule ExVatcheck.Countries do
   @countries Map.keys(@regexes)
 
   @spec valid_format?(binary) :: boolean
+  @doc ~S"""
+  Determines whether or not a VAT identification number has a valid format by
+  checking to see if it matches any of the country-specific regexes.
+
+  Returns `true` if the VAT number matches one of the regexes, and returns `false`
+  otherwise.
+  """
   def valid_format?(vat) when byte_size(vat) <= 2, do: false
 
   def valid_format?(<<country::binary-size(2), _::binary>>) when country not in @countries,
