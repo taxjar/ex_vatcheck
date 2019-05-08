@@ -3,34 +3,36 @@ defmodule ExVatcheck.Countries do
   A module for checking to see whether or not a VAT matches one of the expected
   patterns for EU countries. Countries handled include:
 
-    AT: Austria
-    BE: Belgium
-    BG: Bulgaria
-    CY: Cyprus
-    CZ: Czech Republic
-    DE: Germany
-    DK: Denmark
-    EE: Estonia
-    EL: Greece
-    ES: Spain
-    FI: Finland
-    FR: France
-    GB: United Kingdom
-    HR: Croatia
-    HU: Hungary
-    IE: Ireland
-    IT: Italy
-    LT: Lithuania
-    LU: Luxembourg
-    LV: Latvia
-    MT: Malta
-    NL: Netherlands
-    PL: Poland
-    PT: Portugal
-    RO: Romania
-    SE: Sweden
-    SI: Slovenia
-    SK: Slovakia
+  ```
+  AT: Austria
+  BE: Belgium
+  BG: Bulgaria
+  CY: Cyprus
+  CZ: Czech Republic
+  DE: Germany
+  DK: Denmark
+  EE: Estonia
+  EL: Greece
+  ES: Spain
+  FI: Finland
+  FR: France
+  GB: United Kingdom
+  HR: Croatia
+  HU: Hungary
+  IE: Ireland
+  IT: Italy
+  LT: Lithuania
+  LU: Luxembourg
+  LV: Latvia
+  MT: Malta
+  NL: Netherlands
+  PL: Poland
+  PT: Portugal
+  RO: Romania
+  SE: Sweden
+  SI: Slovenia
+  SK: Slovakia
+  ```
   """
 
   @regexes %{
