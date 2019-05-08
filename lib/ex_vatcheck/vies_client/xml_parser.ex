@@ -8,8 +8,8 @@ defmodule ExVatcheck.VIESClient.XMLParser do
           vat_number: binary,
           request_date: binary,
           valid: boolean,
-          name: binary,
-          address: binary
+          name: binary | nil,
+          address: binary | nil
         }
 
   @check_vat_service_url SweetXml.sigil_x(
@@ -95,17 +95,25 @@ defmodule ExVatcheck.VIESClient.XMLParser do
     end
   end
 
-  @spec format_fields(response) :: response
+  @spec format_fields(map) :: response
   defp format_fields(body) do
     %{
-      country_code: to_string(body.country_code),
-      vat_number: to_string(body.vat_number),
-      request_date: to_string(body.request_date),
+      country_code: format_field(body.country_code),
+      vat_number: format_field(body.vat_number),
+      request_date: body.request_date |> format_field() |> format_date(),
       valid: body.valid == 'true',
-      name: body.name |> to_string(),
-      address: body.address |> to_string()
+      name: format_field(body.name),
+      address: format_field(body.address)
     }
   end
+
+  @spec format_field(charlist | nil) :: binary | nil
+  defp format_field(nil), do: nil
+  defp format_field(charlist), do: to_string(charlist)
+
+  @spec format_date(binary) :: binary
+  defp format_date(<<date::binary-size(10), "+", _time::binary-size(5)>>), do: date
+  defp format_date(date), do: date
 
   @spec format_fault(binary) :: binary
   defp format_fault(fault) do
