@@ -17,7 +17,7 @@ iex(1)> ExVatcheck.check("GB333289454")
     address: "BC0 B1 D1 BROADCAST CENTRE\nWHITE CITY PLACE\n201 WOOD LANE\nLONDON\n\nW12 7TP",
     country_code: "GB",
     name: "BRITISH BROADCASTING CORPORATION",
-    request_date: "2019-04-06+02:00",
+    request_date: "2019-04-06",
     valid: true,
     vat_number: "333289454"
   }
