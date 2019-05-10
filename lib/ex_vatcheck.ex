@@ -15,8 +15,10 @@ defmodule ExVatcheck do
   Returns an `ExVatcheck.VAT.t()` struct.
   """
   def check(vat) do
-    if vat |> VAT.normalize() |> Countries.valid_format?() do
-      validate(vat)
+    normalized_vat = VAT.normalize(vat)
+
+    if Countries.valid_format?(normalized_vat) do
+      validate(normalized_vat)
     else
       %VAT{}
     end

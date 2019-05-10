@@ -76,5 +76,20 @@ defmodule ExVatcheckTest do
     test "returns empty struct if country regex not matched" do
       assert ExVatcheck.check("XX123456789") == %VAT{}
     end
+
+    test "gracefully handles non-alphanumeric characters" do
+      expected = %VAT{
+        valid: false,
+        exists: false,
+        vies_available: true,
+        vies_response: @invalid_vat_response
+      }
+
+      stub(HTTPoison, :post, fn _, _ ->
+        {:ok, %HTTPoison.Response{body: VIESResponses.invalid_vat_response()}}
+      end)
+
+      assert ExVatcheck.check("'GB123123123[]'") == expected
+    end
   end
 end
