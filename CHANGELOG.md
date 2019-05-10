@@ -1,3 +1,9 @@
+#### 0.1.3 (2019-05-10)
+
+##### Bug Fixes
+
+* **normalize:** use normalized vat for validation ([#4](https://github.com/taxjar/ex_vatcheck/pull/4))
+
 #### 0.1.2 (2019-05-09)
 
 ##### Bug Fixes
