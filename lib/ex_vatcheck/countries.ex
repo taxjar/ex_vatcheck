@@ -81,7 +81,7 @@ defmodule ExVatcheck.Countries do
   def valid_format?(<<country::binary-size(2), _::binary>>) when country not in @countries,
     do: false
 
-  def valid_format?(vat = <<country::binary-size(2), _::binary>>) do
+  def valid_format?(<<country::binary-size(2), _::binary>> = vat) do
     @regexes
     |> Map.get(country)
     |> Regex.match?(vat)

@@ -5,7 +5,7 @@ defmodule ExVatcheck.VIESClient.XMLParserTest do
 
   describe "parse_service/1" do
     test "parses the checkVatService url from the VIES WSDL response" do
-      url = "http://ec.europa.eu/taxation_customs/vies/services/checkVatService"
+      url = "https://ec.europa.eu/taxation_customs/vies/services/checkVatService"
 
       response = """
       <wsdl:definitions>

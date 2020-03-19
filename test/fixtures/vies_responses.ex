@@ -4,7 +4,7 @@ defmodule Fixtures.VIESResponses do
   """
 
   def service_url do
-    "http://ec.europa.eu/taxation_customs/vies/services/checkVatService"
+    "https://ec.europa.eu/taxation_customs/vies/services/checkVatService"
   end
 
   def valid_wsdl do
