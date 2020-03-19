@@ -6,7 +6,7 @@ defmodule ExVatcheck.VIESClient do
 
   alias ExVatcheck.VIESClient.XMLParser
 
-  @wsdl_url "http://ec.europa.eu/taxation_customs/vies/checkVatService.wsdl"
+  @wsdl_url "https://ec.europa.eu/taxation_customs/vies/checkVatService.wsdl"
 
   defstruct [:url]
 
