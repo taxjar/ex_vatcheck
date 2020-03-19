@@ -32,7 +32,7 @@ by adding `ex_vatcheck` to your list of dependencies in `mix.exs`:
 ```elixir
 def deps do
   [
-    {:ex_vatcheck, "~> 0.1.0"}
+    {:ex_vatcheck, "~> 0.1.4"}
   ]
 end
 ```
