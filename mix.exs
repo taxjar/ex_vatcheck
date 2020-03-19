@@ -4,7 +4,7 @@ defmodule ExVatcheck.MixProject do
   def project do
     [
       app: :ex_vatcheck,
-      version: "0.1.3",
+      version: "0.1.4",
       elixir: "~> 1.4",
       name: "ExVatcheck",
       elixirc_paths: elixirc_paths(Mix.env()),

@@ -1,3 +1,9 @@
+#### 0.1.4 (2020-03-19)
+
+##### Bug Fixes
+
+* **vies-client:** Update url to https to avoid invalid XML redirect ([#5](https://github.com/taxjar/ex_vatcheck/pull/5))
+
 #### 0.1.3 (2019-05-10)
 
 ##### Bug Fixes
