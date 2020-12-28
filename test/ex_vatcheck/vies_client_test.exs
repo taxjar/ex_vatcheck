@@ -49,7 +49,7 @@ defmodule ExVatcheck.VIESClientTest do
       expected = %{
         country_code: "GB",
         vat_number: "333289454",
-        request_date: "2016-01-16+01:00",
+        request_date: "2016-01-16",
         valid: true,
         name: "BRITISH BROADCASTING CORPORATION",
         address: "BC0 B1 D1 BROADCAST CENTRE\nWHITE CITY PLACE\n201 WOOD LANE\nLONDON\n\nW12 7TP"
@@ -68,7 +68,7 @@ defmodule ExVatcheck.VIESClientTest do
       expected = %{
         country_code: "GB",
         vat_number: "123123123",
-        request_date: "2016-01-16+01:00",
+        request_date: "2016-01-16",
         valid: false,
         name: "---",
         address: "---"

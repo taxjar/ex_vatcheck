@@ -3,34 +3,36 @@ defmodule ExVatcheck.Countries do
   A module for checking to see whether or not a VAT matches one of the expected
   patterns for EU countries. Countries handled include:
 
-    AT: Austria
-    BE: Belgium
-    BG: Bulgaria
-    CY: Cyprus
-    CZ: Czech Republic
-    DE: Germany
-    DK: Denmark
-    EE: Estonia
-    EL: Greece
-    ES: Spain
-    FI: Finland
-    FR: France
-    GB: United Kingdom
-    HR: Croatia
-    HU: Hungary
-    IE: Ireland
-    IT: Italy
-    LT: Lithuania
-    LU: Luxembourg
-    LV: Latvia
-    MT: Malta
-    NL: Netherlands
-    PL: Poland
-    PT: Portugal
-    RO: Romania
-    SE: Sweden
-    SI: Slovenia
-    SK: Slovakia
+  ```
+  AT: Austria
+  BE: Belgium
+  BG: Bulgaria
+  CY: Cyprus
+  CZ: Czech Republic
+  DE: Germany
+  DK: Denmark
+  EE: Estonia
+  EL: Greece
+  ES: Spain
+  FI: Finland
+  FR: France
+  GB: United Kingdom
+  HR: Croatia
+  HU: Hungary
+  IE: Ireland
+  IT: Italy
+  LT: Lithuania
+  LU: Luxembourg
+  LV: Latvia
+  MT: Malta
+  NL: Netherlands
+  PL: Poland
+  PT: Portugal
+  RO: Romania
+  SE: Sweden
+  SI: Slovenia
+  SK: Slovakia
+  ```
   """
 
   @regexes %{
@@ -67,12 +69,19 @@ defmodule ExVatcheck.Countries do
   @countries Map.keys(@regexes)
 
   @spec valid_format?(binary) :: boolean
+  @doc ~S"""
+  Determines whether or not a VAT identification number has a valid format by
+  checking to see if it matches any of the country-specific regexes.
+
+  Returns `true` if the VAT number matches one of the regexes, and returns `false`
+  otherwise.
+  """
   def valid_format?(vat) when byte_size(vat) <= 2, do: false
 
   def valid_format?(<<country::binary-size(2), _::binary>>) when country not in @countries,
     do: false
 
-  def valid_format?(vat = <<country::binary-size(2), _::binary>>) do
+  def valid_format?(<<country::binary-size(2), _::binary>> = vat) do
     @regexes
     |> Map.get(country)
     |> Regex.match?(vat)

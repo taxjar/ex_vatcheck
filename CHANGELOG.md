@@ -1,12 +1,44 @@
+#### 0.1.5 (2020-03-19)
+
+##### Bug Fixes
+
+* **vies-client:** Ensure client url is using https ([#7](https://github.com/taxjar/ex_vatcheck/pull/7))
+
+#### 0.1.4 (2020-03-19)
+
+##### Bug Fixes
+
+* **vies-client:** Update url to https to avoid invalid XML redirect ([#5](https://github.com/taxjar/ex_vatcheck/pull/5))
+
+#### 0.1.3 (2019-05-10)
+
+##### Bug Fixes
+
+* **normalize:** use normalized vat for validation ([#4](https://github.com/taxjar/ex_vatcheck/pull/4))
+
+#### 0.1.2 (2019-05-09)
+
+##### Bug Fixes
+
+* **vies-response:** fix formatting inconsistencies in vies_response fields ([#3](https://github.com/taxjar/ex_vatcheck/pull/3))
+
+##### Chores
+
+* **open-source:** add necessary files to open source ExVatcheck ([#1](https://github.com/taxjar/ex_vatcheck/pull/1))
+
+##### Docs
+
+* **fix:** tidy up docs ([#2](https://github.com/taxjar/ex_vatcheck/pull/2))
+
 #### 0.1.1 (2019-05-01)
 
 ##### Bug Fixes
 
-* **client:** gracefully handle vies wsdl timeouts ([#3](https://bitbucket.org/taxjar/ex_vatcheck/pull-requests/3)) ([6a73fab](https://bitbucket.org/taxjar/ex_vatcheck/commits/6a73fabcd7c3e9967e6d8a862575175051c06e3f))
+* **client:** gracefully handle vies wsdl timeouts
 
 ### 0.1.0 (2019-04-17)
 
 ##### New Features
 
-* **check:** add top-level check method ([#2](https://bitbucket.org/taxjar/ex_vatcheck/pull-requests/2)) ([d3e7d4a](https://bitbucket.org/taxjar/ex_vatcheck/commits/d3e7d4a1297f60f6e2ba1f20cbed7d3b5b1577f8))
-* **vies:**  add VIES client ([#1](https://bitbucket.org/taxjar/ex_vatcheck/pull-requests/1)) ([025f1be](https://bitbucket.org/taxjar/ex_vatcheck/commits/025f1be5bbe6921252374f0352e26b3aa9d25148))
+* **check:** add top-level check method
+* **vies:**  add VIES client

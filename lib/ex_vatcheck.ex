@@ -1,7 +1,7 @@
 defmodule ExVatcheck do
   @moduledoc """
   ExVatcheck is a library for validating VAT identification numbers using the
-  VIES service (http://ec.europa.eu/taxation_customs/vies/). Because the VIES
+  [VIES service](http://ec.europa.eu/taxation_customs/vies/). Because the VIES
   service is not always reliable, and is frequently unavailable, ExVatcheck
   falls back to Regex in the case when the service can't be reached.
   """
@@ -9,9 +9,16 @@ defmodule ExVatcheck do
   alias ExVatcheck.{Countries, VAT, VIESClient}
 
   @spec check(binary) :: VAT.t()
+  @doc ~S"""
+  Validates a given VAT identification number using the VIES service.
+
+  Returns an `ExVatcheck.VAT.t()` struct.
+  """
   def check(vat) do
-    if vat |> VAT.normalize() |> Countries.valid_format?() do
-      validate(vat)
+    normalized_vat = VAT.normalize(vat)
+
+    if Countries.valid_format?(normalized_vat) do
+      validate(normalized_vat)
     else
       %VAT{}
     end

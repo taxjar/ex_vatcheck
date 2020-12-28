@@ -10,7 +10,7 @@ defmodule ExVatcheckTest do
   @valid_vat_response %{
     country_code: "GB",
     vat_number: "333289454",
-    request_date: "2016-01-16+01:00",
+    request_date: "2016-01-16",
     valid: true,
     name: "BRITISH BROADCASTING CORPORATION",
     address: "BC0 B1 D1 BROADCAST CENTRE\nWHITE CITY PLACE\n201 WOOD LANE\nLONDON\n\nW12 7TP"
@@ -19,7 +19,7 @@ defmodule ExVatcheckTest do
   @invalid_vat_response %{
     country_code: "GB",
     vat_number: "123123123",
-    request_date: "2016-01-16+01:00",
+    request_date: "2016-01-16",
     valid: false,
     name: "---",
     address: "---"
@@ -75,6 +75,21 @@ defmodule ExVatcheckTest do
 
     test "returns empty struct if country regex not matched" do
       assert ExVatcheck.check("XX123456789") == %VAT{}
+    end
+
+    test "gracefully handles non-alphanumeric characters" do
+      expected = %VAT{
+        valid: false,
+        exists: false,
+        vies_available: true,
+        vies_response: @invalid_vat_response
+      }
+
+      stub(HTTPoison, :post, fn _, _ ->
+        {:ok, %HTTPoison.Response{body: VIESResponses.invalid_vat_response()}}
+      end)
+
+      assert ExVatcheck.check("'GB123123123[]'") == expected
     end
   end
 end

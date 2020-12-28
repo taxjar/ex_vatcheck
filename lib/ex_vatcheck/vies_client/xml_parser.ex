@@ -8,8 +8,8 @@ defmodule ExVatcheck.VIESClient.XMLParser do
           vat_number: binary,
           request_date: binary,
           valid: boolean,
-          name: binary,
-          address: binary
+          name: binary | nil,
+          address: binary | nil
         }
 
   @check_vat_service_url SweetXml.sigil_x(
@@ -29,17 +29,20 @@ defmodule ExVatcheck.VIESClient.XMLParser do
   ]
 
   @doc ~S"""
-  The parse_service/1 function parses the URL of the checkVatService from the
-  VIES WSDL response. The WSDL has the following structure:
+  The `parse_service/1` function parses the URL of the checkVatService from the
+  VIES WSDL response.
 
+  The WSDL has the following structure:
+  ```
   <wsdl:definitions ...>
     ...
     <wsdl:service name="checkVatService">
       <wsdl:port name="checkVatPort" binding="impl:checkVatBinding">
-        <wsdlsoap:address location="http://ec.europa.eu/taxation_customs/vies/services/checkVatService"/>
+        <wsdlsoap:address location="https://ec.europa.eu/taxation_customs/vies/services/checkVatService"/>
       </wsdl:port>
     </wsdl:service>
   </wsdl:definitions>
+  ```
   """
   @spec parse_service(binary) :: {:ok, binary} | {:error, binary}
   def parse_service(wsdl_response) do
@@ -50,10 +53,11 @@ defmodule ExVatcheck.VIESClient.XMLParser do
   end
 
   @doc ~S"""
-  The parse_response/1 function parses the XML response returned by requests to
-  the checkVatService. When the service is up, the response has the following
-  structure:
+  The `parse_response/1` function parses the XML response returned by requests to
+  the checkVatService.
 
+  When the service is available, the response has the following structure:
+  ```
   <soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
     <soap:Body>
       <checkVatResponse xmlns="urn:ec.europa.eu:taxud:vies:services:checkVat:types">
@@ -66,10 +70,12 @@ defmodule ExVatcheck.VIESClient.XMLParser do
       </checkVatResponse>
     </soap:Body>
   </soap:Envelope>
+  ```
 
   Sometimes, the VIES service is unavailable (see http://ec.europa.eu/taxation_customs/vies/help.html).
   In the case that it is not, the response has the following structure:
 
+  ```
   <soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
     <soap:Body>
       <soap:Fault>
@@ -77,6 +83,7 @@ defmodule ExVatcheck.VIESClient.XMLParser do
       </soap:Fault>
     </soap:Body>
   </soap:Envelope>
+  ```
   """
   @spec parse_response(binary) :: {:ok, map} | {:error, binary}
   def parse_response(response_body) do
@@ -88,17 +95,25 @@ defmodule ExVatcheck.VIESClient.XMLParser do
     end
   end
 
-  @spec format_fields(response) :: response
+  @spec format_fields(map) :: response
   defp format_fields(body) do
     %{
-      country_code: to_string(body.country_code),
-      vat_number: to_string(body.vat_number),
-      request_date: to_string(body.request_date),
+      country_code: format_field(body.country_code),
+      vat_number: format_field(body.vat_number),
+      request_date: body.request_date |> format_field() |> format_date(),
       valid: body.valid == 'true',
-      name: body.name |> to_string(),
-      address: body.address |> to_string()
+      name: format_field(body.name),
+      address: format_field(body.address)
     }
   end
+
+  @spec format_field(charlist | nil) :: binary | nil
+  defp format_field(nil), do: nil
+  defp format_field(charlist), do: to_string(charlist)
+
+  @spec format_date(binary) :: binary
+  defp format_date(<<date::binary-size(10), "+", _time::binary-size(5)>>), do: date
+  defp format_date(date), do: date
 
   @spec format_fault(binary) :: binary
   defp format_fault(fault) do

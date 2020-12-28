@@ -5,7 +5,7 @@ defmodule ExVatcheck.VIESClient.XMLParserTest do
 
   describe "parse_service/1" do
     test "parses the checkVatService url from the VIES WSDL response" do
-      url = "http://ec.europa.eu/taxation_customs/vies/services/checkVatService"
+      url = "https://ec.europa.eu/taxation_customs/vies/services/checkVatService"
 
       response = """
       <wsdl:definitions>
@@ -55,7 +55,7 @@ defmodule ExVatcheck.VIESClient.XMLParserTest do
       expected = %{
         country_code: "BE",
         vat_number: "0829071668",
-        request_date: "2016-01-16+01:00",
+        request_date: "2016-01-16",
         valid: true,
         name: "SPRL BIGUP",
         address: "RUE LONGUE 93 1320 BEAUVECHAIN"
@@ -83,10 +83,66 @@ defmodule ExVatcheck.VIESClient.XMLParserTest do
       expected = %{
         country_code: "BE",
         vat_number: "123123123",
-        request_date: "2016-01-16+01:00",
+        request_date: "2016-01-16",
         valid: false,
         name: "---",
         address: "---"
+      }
+
+      assert XMLParser.parse_response(response) == {:ok, expected}
+    end
+
+    test "correctly keeps nil values when present in checkVat response" do
+      response = """
+      <soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
+        <soap:Body>
+          <checkVatResponse xmlns="urn:ec.europa.eu:taxud:vies:services:checkVat:types">
+            <countryCode>BG</countryCode>
+            <vatNumber>451158821</vatNumber>
+            <requestDate>2016-01-16+01:00</requestDate>
+            <valid>false</valid>
+            <name></name>
+            <address></address>
+          </checkVatResponse>
+        </soap:Body>
+      </soap:Envelope>
+      """
+
+      expected = %{
+        country_code: "BG",
+        vat_number: "451158821",
+        request_date: "2016-01-16",
+        valid: false,
+        name: nil,
+        address: nil
+      }
+
+      assert XMLParser.parse_response(response) == {:ok, expected}
+    end
+
+    test "gracefully handles unexpected date formats" do
+      response = """
+      <soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
+        <soap:Body>
+          <checkVatResponse xmlns="urn:ec.europa.eu:taxud:vies:services:checkVat:types">
+            <countryCode>BG</countryCode>
+            <vatNumber>451158821</vatNumber>
+            <requestDate>2016-01</requestDate>
+            <valid>false</valid>
+            <name></name>
+            <address></address>
+          </checkVatResponse>
+        </soap:Body>
+      </soap:Envelope>
+      """
+
+      expected = %{
+        country_code: "BG",
+        vat_number: "451158821",
+        request_date: "2016-01",
+        valid: false,
+        name: nil,
+        address: nil
       }
 
       assert XMLParser.parse_response(response) == {:ok, expected}

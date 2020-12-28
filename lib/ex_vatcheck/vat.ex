@@ -19,6 +19,12 @@ defmodule ExVatcheck.VAT do
   @non_alphanumerics ~r/[^a-zA-Z\d]+/u
 
   @spec normalize(binary) :: binary
+  @doc ~S"""
+  Normalizes a VAT identification number by stripping non-alphanumeric characters
+  and capitalizing any letters.
+
+  Returns a binary representing the normalized VAT number.
+  """
   def normalize(vat) do
     vat
     |> String.upcase()
