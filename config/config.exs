@@ -10,7 +10,11 @@ use Mix.Config
 
 # You can configure your application as:
 #
-#     config :ex_vatcheck, key: :value
+config :ex_vatcheck,
+  hmrc_client_id: System.get_env("HMRC_CLIENT_ID"),
+  hmrc_secret: System.get_env("HMRC_SECRET"),
+  hmrc_url: System.get_env("HMRC_URL") || "https://test-api.service.hmrc.gov.uk"
+
 #
 # and access this configuration in your application as:
 #

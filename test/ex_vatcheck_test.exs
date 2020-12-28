@@ -36,6 +36,10 @@ defmodule ExVatcheckTest do
         vies_response: @valid_vat_response
       }
 
+      stub(HTTPoison, :get, fn _ ->
+        {:ok, %HTTPoison.Response{body: VIESResponses.valid_wsdl()}}
+      end)
+
       stub(HTTPoison, :post, fn _, _ ->
         {:ok, %HTTPoison.Response{body: VIESResponses.valid_vat_response()}}
       end)
@@ -51,6 +55,10 @@ defmodule ExVatcheckTest do
         vies_response: @invalid_vat_response
       }
 
+      stub(HTTPoison, :get, fn _ ->
+        {:ok, %HTTPoison.Response{body: VIESResponses.valid_wsdl()}}
+      end)
+
       stub(HTTPoison, :post, fn _, _ ->
         {:ok, %HTTPoison.Response{body: VIESResponses.invalid_vat_response()}}
       end)
@@ -65,6 +73,10 @@ defmodule ExVatcheckTest do
         vies_available: false,
         vies_response: %{error: "Service timed out"}
       }
+
+      stub(HTTPoison, :get, fn _ ->
+        {:ok, %HTTPoison.Response{body: VIESResponses.valid_wsdl()}}
+      end)
 
       stub(HTTPoison, :post, fn _, _ ->
         {:error, %HTTPoison.Error{reason: :timeout}}

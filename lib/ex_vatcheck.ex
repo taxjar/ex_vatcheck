@@ -6,7 +6,7 @@ defmodule ExVatcheck do
   falls back to Regex in the case when the service can't be reached.
   """
 
-  alias ExVatcheck.{Countries, VAT, VIESClient}
+  alias ExVatcheck.{Countries, VAT, Client}
 
   @spec check(binary) :: VAT.t()
   @doc ~S"""
@@ -26,8 +26,8 @@ defmodule ExVatcheck do
 
   @spec validate(binary) :: VAT.t()
   defp validate(<<country::binary-size(2), number::binary>>) do
-    with {:ok, client} <- VIESClient.new(),
-         {:ok, response} <- VIESClient.check_vat(client, country, number) do
+    with {:ok, client} <- Client.new(country),
+         {:ok, response} <- Client.check_vat(client, country, number) do
       %VAT{
         valid: response.valid,
         exists: response.valid,
