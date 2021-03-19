@@ -7,7 +7,7 @@ defmodule ExVatcheck.VIESClient do
   alias ExVatcheck.VIESClient.XMLParser
 
   @wsdl_url "https://ec.europa.eu/taxation_customs/vies/checkVatService.wsdl"
-  @request_options [ssl: [{:versions, [:"tlsv1.2"]}]]
+  @request_options [ssl: [{:versions, [:"tlsv1.2", :"tlsv1.3"]}]]
 
   defstruct [:url]
 
