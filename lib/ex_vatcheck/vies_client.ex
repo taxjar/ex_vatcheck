@@ -39,7 +39,7 @@ defmodule ExVatcheck.VIESClient do
   `check_vat/3`. If the VIES service times out, or if invalid WSDL is returned
   and the checkVat service URL cannot be parsed, an error is returned.
   """
-  def new() do
+  def new do
     with {:ok, response} <- HTTPoison.get(@wsdl_url),
          {:ok, url} <- XMLParser.parse_service(response.body) do
       {:ok, %__MODULE__{url: corrected_client_url(url)}}
