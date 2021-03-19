@@ -7,7 +7,11 @@ defmodule ExVatcheck.VIESClient do
   alias ExVatcheck.VIESClient.XMLParser
 
   @wsdl_url "https://ec.europa.eu/taxation_customs/vies/checkVatService.wsdl"
-  @request_options [ssl: [{:versions, [:"tlsv1.2", :"tlsv1.3"]}]]
+  if System.otp_release() == "23" do
+    @request_options [ssl: [{:versions, [:"tlsv1.3", :"tlsv1.2"]}]]
+  else
+    @request_options [ssl: [{:versions, [:"tlsv1.2"]}]]
+  end
 
   defstruct [:url]
 
@@ -40,7 +44,7 @@ defmodule ExVatcheck.VIESClient do
   `check_vat/3`. If the VIES service times out, or if invalid WSDL is returned
   and the checkVat service URL cannot be parsed, an error is returned.
   """
-  def new() do
+  def new do
     with {:ok, response} <- HTTPoison.get(@wsdl_url, [], @request_options),
          {:ok, url} <- XMLParser.parse_service(response.body) do
       {:ok, %__MODULE__{url: corrected_client_url(url)}}
