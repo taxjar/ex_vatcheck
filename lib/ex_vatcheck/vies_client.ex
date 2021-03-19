@@ -7,6 +7,7 @@ defmodule ExVatcheck.VIESClient do
   alias ExVatcheck.VIESClient.XMLParser
 
   @wsdl_url "https://ec.europa.eu/taxation_customs/vies/checkVatService.wsdl"
+  @request_options [ssl: [{:versions, [:"tlsv1.2"]}]]
 
   defstruct [:url]
 
@@ -27,7 +28,7 @@ defmodule ExVatcheck.VIESClient do
   def check_vat(client, country_code, vat_number) do
     req_body = vat_request(country_code, vat_number)
 
-    case HTTPoison.post(client.url, req_body) do
+    case HTTPoison.post(client.url, req_body, [], @request_options) do
       {:ok, response} -> XMLParser.parse_response(response.body)
       {:error, %HTTPoison.Error{reason: :timeout}} -> {:error, "Service timed out"}
     end
@@ -40,7 +41,7 @@ defmodule ExVatcheck.VIESClient do
   and the checkVat service URL cannot be parsed, an error is returned.
   """
   def new() do
-    with {:ok, response} <- HTTPoison.get(@wsdl_url),
+    with {:ok, response} <- HTTPoison.get(@wsdl_url, [], @request_options),
          {:ok, url} <- XMLParser.parse_service(response.body) do
       {:ok, %__MODULE__{url: corrected_client_url(url)}}
     else

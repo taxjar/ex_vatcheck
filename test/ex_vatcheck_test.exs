@@ -36,7 +36,7 @@ defmodule ExVatcheckTest do
         vies_response: @valid_vat_response
       }
 
-      stub(HTTPoison, :post, fn _, _ ->
+      stub(HTTPoison, :post, fn _, _, _, _ ->
         {:ok, %HTTPoison.Response{body: VIESResponses.valid_vat_response()}}
       end)
 
@@ -51,7 +51,7 @@ defmodule ExVatcheckTest do
         vies_response: @invalid_vat_response
       }
 
-      stub(HTTPoison, :post, fn _, _ ->
+      stub(HTTPoison, :post, fn _, _, _, _ ->
         {:ok, %HTTPoison.Response{body: VIESResponses.invalid_vat_response()}}
       end)
 
@@ -66,7 +66,7 @@ defmodule ExVatcheckTest do
         vies_response: %{error: "Service timed out"}
       }
 
-      stub(HTTPoison, :post, fn _, _ ->
+      stub(HTTPoison, :post, fn _, _, _, _ ->
         {:error, %HTTPoison.Error{reason: :timeout}}
       end)
 
@@ -85,7 +85,7 @@ defmodule ExVatcheckTest do
         vies_response: @invalid_vat_response
       }
 
-      stub(HTTPoison, :post, fn _, _ ->
+      stub(HTTPoison, :post, fn _, _, _, _ ->
         {:ok, %HTTPoison.Response{body: VIESResponses.invalid_vat_response()}}
       end)
 
