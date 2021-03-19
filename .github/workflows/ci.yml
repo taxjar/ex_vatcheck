@@ -50,8 +50,8 @@ jobs:
     strategy:
       matrix:
         elixir_version:
-          - 1.4.5-erlang-19.3.6.13-alpine-3.12.0
-          - 1.4.5-erlang-20.3.8.26-alpine-3.12.0
+          - 1.6.6-erlang-19.3.6.13-alpine-3.12.0
+          - 1.6.6-erlang-20.3.8.26-alpine-3.12.0
           - 1.11.4-erlang-21.3.8.21-alpine-3.13.1
           - 1.11.4-erlang-22.3.4.16-alpine-3.13.1
           - 1.11.4-erlang-23.2.7-alpine-3.13.2
