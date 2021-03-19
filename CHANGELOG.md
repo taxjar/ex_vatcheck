@@ -1,7 +1,10 @@
-#### 0.1.6 (2021-03-19)
+#### 0.2.0 (2021-03-19)
 
 * **vies-client:** Ensure TLS options are set correctly in HTTPoison to allow to
     work with newer OTP ([#8](https://github.com/taxjar/ex_vatcheck/pull/8))
+* Drop support for Elixir 1.4 thru 1.5 ([#8](https://github.com/taxjar/ex_vatcheck/pull/8))
+* Trade Travis-CI for GitHub Actions, and update test pipeline to cover
+    combinations of Elixir and OTP versions.
 
 #### 0.1.5 (2020-03-19)
 
