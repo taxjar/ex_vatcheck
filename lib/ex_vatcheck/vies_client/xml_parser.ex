@@ -3,6 +3,8 @@ defmodule ExVatcheck.VIESClient.XMLParser do
   A module for parsing XML responses from VIES client requests into Elixir maps.
   """
 
+  alias ExVatcheck.Xml
+
   @type response :: %{
           country_code: binary,
           vat_number: binary,
@@ -46,7 +48,7 @@ defmodule ExVatcheck.VIESClient.XMLParser do
   """
   @spec parse_service(binary) :: {:ok, binary} | {:error, binary}
   def parse_service(wsdl_response) do
-    case SweetXml.xpath(wsdl_response, @check_vat_service_url) do
+    case Xml.parse(wsdl_response, @check_vat_service_url) do
       nil -> {:error, :invalid_wsdl}
       url -> {:ok, to_string(url)}
     end
@@ -87,10 +89,10 @@ defmodule ExVatcheck.VIESClient.XMLParser do
   """
   @spec parse_response(binary) :: {:ok, map} | {:error, binary}
   def parse_response(response_body) do
-    if fault = SweetXml.xpath(response_body, @check_vat_fault) do
+    if fault = Xml.parse(response_body, @check_vat_fault) do
       {:error, fault |> to_string() |> format_fault()}
     else
-      body = SweetXml.xpath(response_body, @check_vat_response, @check_vat_response_fields)
+      body = Xml.parse(response_body, @check_vat_response, @check_vat_response_fields)
       {:ok, format_fields(body)}
     end
   end
