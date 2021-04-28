@@ -55,6 +55,7 @@ jobs:
           - 1.11.4-erlang-21.3.8.21-alpine-3.13.1
           - 1.11.4-erlang-22.3.4.16-alpine-3.13.1
           - 1.11.4-erlang-23.2.7-alpine-3.13.2
+          - 1.11.4-erlang-24.0-rc3-alpine-3.13.3
     env:
       MIX_ENV: test
       CI: "true"

@@ -1,4 +1,4 @@
-#### 0.2.0 (2021-03-19)
+#### 0.2.0 (2021-04-30)
 
 * **vies-client:** Ensure TLS options are set correctly in HTTPoison to allow to
     work with newer OTP ([#8](https://github.com/taxjar/ex_vatcheck/pull/8))

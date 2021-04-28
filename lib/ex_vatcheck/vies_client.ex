@@ -7,7 +7,7 @@ defmodule ExVatcheck.VIESClient do
   alias ExVatcheck.VIESClient.XMLParser
 
   @wsdl_url "https://ec.europa.eu/taxation_customs/vies/checkVatService.wsdl"
-  if System.otp_release() == "23" do
+  if Version.compare(System.otp_release() <> ".0.0", "23.0.0") != :lt do
     @request_options [ssl: [{:versions, [:"tlsv1.3", :"tlsv1.2"]}]]
   else
     @request_options [ssl: [{:versions, [:"tlsv1.2"]}]]
