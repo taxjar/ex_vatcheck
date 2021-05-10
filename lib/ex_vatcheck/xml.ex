@@ -1,4 +1,5 @@
 defmodule ExVatcheck.Xml do
+  @moduledoc false
   require SweetXml
 
   def parse(doc, %SweetXpath{} = spec, subspec \\ []) when is_binary(doc) do
