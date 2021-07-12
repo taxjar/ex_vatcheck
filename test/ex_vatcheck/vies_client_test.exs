@@ -10,7 +10,7 @@ defmodule ExVatcheck.VIESClientTest do
     setup :verify_on_exit!
 
     test "creates a new VIES client" do
-      stub(HTTPoison, :get, fn _ ->
+      stub(HTTPoison, :get, fn _, _, _ ->
         {:ok, %HTTPoison.Response{body: VIESResponses.valid_wsdl()}}
       end)
 
@@ -18,7 +18,7 @@ defmodule ExVatcheck.VIESClientTest do
     end
 
     test "errors on VIES timeout" do
-      stub(HTTPoison, :get, fn _ ->
+      stub(HTTPoison, :get, fn _, _, _ ->
         {:error, %HTTPoison.Error{id: nil, reason: :timeout}}
       end)
 
@@ -26,7 +26,7 @@ defmodule ExVatcheck.VIESClientTest do
     end
 
     test "error when invalid WSDL XML returned" do
-      stub(HTTPoison, :get, fn _ ->
+      stub(HTTPoison, :get, fn _, _, _ ->
         {:ok, %HTTPoison.Response{body: VIESResponses.invalid_wsdl()}}
       end)
 
@@ -34,7 +34,7 @@ defmodule ExVatcheck.VIESClientTest do
     end
 
     test "errors on HTTPoison error" do
-      stub(HTTPoison, :get, fn _ ->
+      stub(HTTPoison, :get, fn _, _, _ ->
         {:error, %HTTPoison.Error{id: nil, reason: :unexpected_error}}
       end)
 
@@ -55,7 +55,7 @@ defmodule ExVatcheck.VIESClientTest do
         address: "BC0 B1 D1 BROADCAST CENTRE\nWHITE CITY PLACE\n201 WOOD LANE\nLONDON\n\nW12 7TP"
       }
 
-      stub(HTTPoison, :post, fn _, _ ->
+      stub(HTTPoison, :post, fn _, _, _, _ ->
         {:ok, %HTTPoison.Response{body: VIESResponses.valid_vat_response()}}
       end)
 
@@ -74,7 +74,7 @@ defmodule ExVatcheck.VIESClientTest do
         address: "---"
       }
 
-      stub(HTTPoison, :post, fn _, _ ->
+      stub(HTTPoison, :post, fn _, _, _, _ ->
         {:ok, %HTTPoison.Response{body: VIESResponses.invalid_vat_response()}}
       end)
 
@@ -84,7 +84,7 @@ defmodule ExVatcheck.VIESClientTest do
     test "gracefully handles error due to unavailable VIES service" do
       client = %VIESClient{url: VIESResponses.service_url()}
 
-      stub(HTTPoison, :post, fn _, _ ->
+      stub(HTTPoison, :post, fn _, _, _, _ ->
         {:ok, %HTTPoison.Response{body: VIESResponses.service_unavailable_response()}}
       end)
 
@@ -94,7 +94,7 @@ defmodule ExVatcheck.VIESClientTest do
     test "gracefully handles VIES service timeouts" do
       client = %VIESClient{url: VIESResponses.service_url()}
 
-      stub(HTTPoison, :post, fn _, _ ->
+      stub(HTTPoison, :post, fn _, _, _, _ ->
         {:error, %HTTPoison.Error{id: nil, reason: :timeout}}
       end)
 
