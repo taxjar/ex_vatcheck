@@ -14,13 +14,8 @@ defmodule ExVatcheck.MixProject do
       deps: deps(),
       docs: docs(),
       package: package(),
-      test_coverage: [tool: ExCoveralls],
       preferred_cli_env: [
-        credo: :test,
-        coveralls: :test,
-        "coveralls.detail": :test,
-        "coveralls.post": :test,
-        "coveralls.html": :test
+        credo: :test
       ]
     ]
   end
@@ -39,7 +34,6 @@ defmodule ExVatcheck.MixProject do
       {:credo, "~> 1.0", only: [:dev, :test], runtime: false},
       {:dialyxir, "~> 0.5", only: :dev, runtime: false},
       {:ex_doc, "~> 0.19", only: :dev, runtime: false},
-      {:excoveralls, "~> 0.10", only: [:test]},
       {:mimic, "~> 0.2", only: :test}
     ]
   end
