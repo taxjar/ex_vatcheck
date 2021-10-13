@@ -81,6 +81,7 @@ jobs:
     - name: Install Dependencies
       run: |
         rm mix.lock
+        sed -i '/credo/d' mix.exs
         mix deps.get
     - name: Compile
       run: mix compile --force --warnings-as-errors
