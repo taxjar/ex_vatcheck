@@ -36,7 +36,7 @@ defmodule ExVatcheck.MixProject do
       {:httpoison, "~> 1.3"},
       {:sweet_xml, "~> 0.7"},
       # dev/test/tools
-      {:credo, "~> 1.0.0", only: [:dev, :test], runtime: false},
+      {:credo, "~> 1.0", only: [:dev, :test], runtime: false},
       {:dialyxir, "~> 0.5", only: :dev, runtime: false},
       {:ex_doc, "~> 0.19", only: :dev, runtime: false},
       {:excoveralls, "~> 0.10", only: [:test]},
