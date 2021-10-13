@@ -38,7 +38,7 @@ defmodule ExVatcheck.MixProject do
       {:ex_doc, "~> 0.19", only: :dev, runtime: false},
       {:httpoison, "~> 1.3"},
       {:mimic, "~> 0.2", only: :test},
-      {:sweet_xml, "~> 0.6", github: "taxjar/sweet_xml", branch: "issue-71"}
+      {:sweet_xml, "~> 0.7"}
     ]
   end
 
