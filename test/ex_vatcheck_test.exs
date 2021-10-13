@@ -91,5 +91,22 @@ defmodule ExVatcheckTest do
 
       assert ExVatcheck.check("'GB123123123[]'") == expected
     end
+
+    @tag external: true
+    test "Smoke check" do
+      assert %ExVatcheck.VAT{
+               exists: true,
+               valid: true,
+               vies_available: true,
+               vies_response: %{
+                 address: "Tobelbader Straße 30\nAT-8141 Premstätten",
+                 country_code: "AT",
+                 name: "ams AG",
+                 request_date: _date,
+                 valid: true,
+                 vat_number: "U28560205"
+               }
+             } = ExVatcheck.check("ATU28560205")
+    end
   end
 end

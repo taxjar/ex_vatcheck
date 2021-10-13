@@ -1,3 +1,12 @@
+#### 0.2.1 (2021-10-13)
+
+##### Chores
+
+* Trade Travis-CI for GitHub Actions, and update test pipeline to cover
+    combinations of Elixir and OTP versions.
+* Drop support for Elixir 1.4 thru 1.5. This wasn't true even before this
+  commit, but better testing confirmed this.
+
 #### 0.2.0 (2021-10-13)
 
 ##### Security
