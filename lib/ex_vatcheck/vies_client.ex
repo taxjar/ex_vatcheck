@@ -27,7 +27,7 @@ defmodule ExVatcheck.VIESClient do
   def check_vat(client, country_code, vat_number) do
     req_body = vat_request(country_code, vat_number)
 
-    case HTTPoison.post(client.url, req_body) do
+    case HTTPoison.post(client.url, req_body, [{"content-type", "text/xml"}]) do
       {:ok, response} -> XMLParser.parse_response(response.body)
       {:error, %HTTPoison.Error{reason: :timeout}} -> {:error, "Service timed out"}
     end
