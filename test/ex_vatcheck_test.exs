@@ -18,7 +18,7 @@ defmodule ExVatcheckTest do
 
   @invalid_vat_response %{
     country_code: "GB",
-    vat_number: "123123123",
+    vat_number: nil,
     request_date: "2016-01-16",
     valid: false,
     name: "---",

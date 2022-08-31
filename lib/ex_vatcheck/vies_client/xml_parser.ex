@@ -18,16 +18,17 @@ defmodule ExVatcheck.VIESClient.XMLParser do
                            "//wsdl:definitions/wsdl:service[name=checkVatService]/wsdl:port[name=checkVatPort]/wsdlsoap:address/@location"
                          )
 
-  @check_vat_fault SweetXml.sigil_x("//soap:Envelope/soap:Body/soap:Fault/faultstring/text()")
-  @check_vat_response SweetXml.sigil_x("//soap:Envelope/soap:Body/checkVatResponse")
+  @check_vat_fault SweetXml.sigil_x("//env:Envelope/env:Body/env:Fault/faultstring/text()")
+  @check_vat_response SweetXml.sigil_x("//env:Envelope/env:Body/ns2:checkVatResponse")
+
 
   @check_vat_response_fields [
-    country_code: SweetXml.sigil_x("./countryCode/text()"),
-    vat_number: SweetXml.sigil_x("./vatNumber/text()"),
-    request_date: SweetXml.sigil_x("./requestDate/text()"),
-    valid: SweetXml.sigil_x("./valid/text()"),
-    name: SweetXml.sigil_x("./name/text()"),
-    address: SweetXml.sigil_x("./address/text()")
+    country_code: SweetXml.sigil_x("./ns2:countryCode/text()"),
+    vat_number: SweetXml.sigil_x("./ns2:vatNumber/text()"),
+    request_date: SweetXml.sigil_x("./ns2:requestDate/text()"),
+    valid: SweetXml.sigil_x("./ns2:valid/text()"),
+    name: SweetXml.sigil_x("./ns2:name/text()"),
+    address: SweetXml.sigil_x("./ns2:address/text()")
   ]
 
   @doc ~S"""
@@ -60,31 +61,31 @@ defmodule ExVatcheck.VIESClient.XMLParser do
 
   When the service is available, the response has the following structure:
   ```
-  <soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
-    <soap:Body>
-      <checkVatResponse xmlns="urn:ec.europa.eu:taxud:vies:services:checkVat:types">
-        <countryCode>BE</countryCode>
-        <vatNumber>0829071668</vatNumber>
-        <requestDate>2016-01-16+01:00</requestDate>
-        <valid>true</valid>
-        <name>SPRL BIGUP</name>
-        <address>RUE LONGUE 93 1320 BEAUVECHAIN</address>
-      </checkVatResponse>
-    </soap:Body>
-  </soap:Envelope>
+  <env:Envelope xmlns:env="http://schemas.xmlsoap.org/soap/envelope/">
+    <env:Body>
+      <ns2:checkVatResponse xmlns="urn:ec.europa.eu:taxud:vies:services:checkVat:types">
+        <ns2:countryCode>BE</countryCode>
+        <ns2:vatNumber>0829071668</vatNumber>
+        <ns2:requestDate>2016-01-16+01:00</requestDate>
+        <ns2:valid>true</valid>
+        <ns2:name>SPRL BIGUP</name>
+        <ns2:address>RUE LONGUE 93 1320 BEAUVECHAIN</address>
+      </ns2:checkVatResponse>
+    </env:Body>
+  </env:Envelope>
   ```
 
   Sometimes, the VIES service is unavailable (see http://ec.europa.eu/taxation_customs/vies/help.html).
   In the case that it is not, the response has the following structure:
 
   ```
-  <soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
-    <soap:Body>
-      <soap:Fault>
+  <env:Envelope xmlns:env="http://schemas.xmlsoap.org/soap/envelope/">
+    <env:Body>
+      <env:Fault>
         ...
-      </soap:Fault>
-    </soap:Body>
-  </soap:Envelope>
+      </env:Fault>
+    </env:Body>
+  </env:Envelope>
   ```
   """
   @spec parse_response(binary) :: {:ok, map} | {:error, binary}
@@ -93,7 +94,7 @@ defmodule ExVatcheck.VIESClient.XMLParser do
       {:error, fault |> to_string() |> format_fault()}
     else
       body = Xml.parse(response_body, @check_vat_response, @check_vat_response_fields)
-      {:ok, format_fields(body)}
+        {:ok, format_fields(body)}
     end
   end
 
