@@ -18,9 +18,12 @@ defmodule ExVatcheck.VIESClient.XMLParser do
                            "//wsdl:definitions/wsdl:service[name=checkVatService]/wsdl:port[name=checkVatPort]/wsdlsoap:address/@location"
                          )
 
-  @check_vat_fault SweetXml.sigil_x("//env:Envelope/env:Body/env:Fault/faultstring/text()")
+  @check_vat_fault SweetXml.sigil_x("//env:Envelope/env:Body/env:Fault")
   @check_vat_response SweetXml.sigil_x("//env:Envelope/env:Body/ns2:checkVatResponse")
 
+  @check_vat_fault_fields [
+    fault: SweetXml.sigil_x("./faultstring/text()")
+  ]
 
   @check_vat_response_fields [
     country_code: SweetXml.sigil_x("./ns2:countryCode/text()"),
@@ -87,14 +90,21 @@ defmodule ExVatcheck.VIESClient.XMLParser do
     </env:Body>
   </env:Envelope>
   ```
+
+  If ex_vatcheck is not able to parse either of the above XML responses,
+  the function will return an error tuple.
   """
   @spec parse_response(binary) :: {:ok, map} | {:error, binary}
   def parse_response(response_body) do
-    if fault = Xml.parse(response_body, @check_vat_fault) do
-      {:error, fault |> to_string() |> format_fault()}
-    else
-      body = Xml.parse(response_body, @check_vat_response, @check_vat_response_fields)
+    cond do
+      fault = Xml.parse(response_body, @check_vat_fault, @check_vat_fault_fields) ->
+        {:error, fault |> Map.get(:fault) |> to_string() |> format_fault()}
+
+      body = Xml.parse(response_body, @check_vat_response, @check_vat_response_fields) ->
         {:ok, format_fields(body)}
+
+      true ->
+        {:error, format_fault("XML_ERROR")}
     end
   end
 

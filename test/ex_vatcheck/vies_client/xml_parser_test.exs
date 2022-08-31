@@ -167,13 +167,33 @@ defmodule ExVatcheck.VIESClient.XMLParserTest do
         <env:Envelope xmlns:env="http://schemas.xmlsoap.org/soap/envelope/">
           <env:Body>
             <env:Fault>
-              <faultstring>XML_ERROR</faultstring>
+              <faultstring>UNKNOWN_ERROR</faultstring>
             </env:Fault>
           </env:Body>
         </env:Envelope>
       """
 
-      assert XMLParser.parse_response(fault) == {:error, "Unknown error: XML_ERROR"}
+      assert XMLParser.parse_response(fault) == {:error, "Unknown error: UNKNOWN_ERROR"}
+    end
+
+    test "gracefully handles unexpected XML parsing errors from the VIES service" do
+      unexpected_namespaces = """
+        <soap:Envelope xmlns:env="http://schemas.xmlsoap.org/soap/envelope/">
+          <soap:Body>
+            <ns1:checkVatResponse xmlns:ns1="urn:ec.europa.eu:taxud:vies:services:checkVat:types">
+              <ns1:countryCode>BG</ns1:countryCode>
+              <ns1:vatNumber>451158821</ns1:vatNumber>
+              <ns1:requestDate>2016-01</ns1:requestDate>
+              <ns1:valid>false</ns1:valid>
+              <ns1:name></ns1:name>
+              <ns1:address></ns1:address>
+            </ns1:checkVatResponse>
+          </soap:Body>
+        </soap:Envelope>
+      """
+
+      assert XMLParser.parse_response(unexpected_namespaces) ==
+               {:error, "Unknown error: XML_ERROR"}
     end
   end
 end
