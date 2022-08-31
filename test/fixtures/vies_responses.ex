@@ -59,6 +59,20 @@ defmodule Fixtures.VIESResponses do
     """
   end
 
+  def invalid_input_fault_response do
+    """
+    <env:Envelope xmlns:env=\"http://schemas.xmlsoap.org/soap/envelope/\">
+      <env:Header/>
+      <env:Body>
+        <env:Fault>
+          <faultcode>env:Server</faultcode>
+          <faultstring>INVALID_INPUT</faultstring>
+        </env:Fault>
+      </env:Body>
+    </env:Envelope>
+    """
+  end
+
   def service_unavailable_response do
     """
     <env:Envelope xmlns:env="http://schemas.xmlsoap.org/soap/envelope/">

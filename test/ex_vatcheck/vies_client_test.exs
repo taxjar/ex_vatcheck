@@ -81,6 +81,16 @@ defmodule ExVatcheck.VIESClientTest do
       assert VIESClient.check_vat(client, "GB", "123123123") == {:ok, expected}
     end
 
+    test "handles invalid VAT response if ExVatcheck validation misses it" do
+      client = %VIESClient{url: VIESResponses.service_url()}
+
+      stub(HTTPoison, :post, fn _, _, _ ->
+        {:ok, %HTTPoison.Response{body: VIESResponses.invalid_input_fault_response()}}
+      end)
+
+      assert VIESClient.check_vat(client, "ZZ", "123") == {:error, "Unknown error: INVALID_INPUT"}
+    end
+
     test "gracefully handles error due to unavailable VIES service" do
       client = %VIESClient{url: VIESResponses.service_url()}
 
