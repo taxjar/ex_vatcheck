@@ -101,7 +101,7 @@ defmodule ExVatcheckTest do
                vies_response: %{
                  address: "Tobelbader Straße 30\nAT-8141 Premstätten",
                  country_code: "AT",
-                 name: "ams AG",
+                 name: "ams-OSRAM AG",
                  request_date: _date,
                  valid: true,
                  vat_number: "U28560205"
