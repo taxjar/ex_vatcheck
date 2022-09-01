@@ -1,3 +1,9 @@
+#### 0.3.1 (2022-08-31)
+
+##### Bug Fixes
+
+* Fixes change to business name fetched in the smoke test.
+
 #### 0.3.0 (2022-08-31)
 
 ##### Breaking Bug Fixes
