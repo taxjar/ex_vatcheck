@@ -38,18 +38,18 @@ defmodule ExVatcheck.VIESClient.XMLParserTest do
   describe "parse_response/1" do
     test "parses the XML response from the checkVatService into a map" do
       response = """
-      <soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
-        <soap:Body>
-          <checkVatResponse xmlns="urn:ec.europa.eu:taxud:vies:services:checkVat:types">
-            <countryCode>BE</countryCode>
-            <vatNumber>0829071668</vatNumber>
-            <requestDate>2016-01-16+01:00</requestDate>
-            <valid>true</valid>
-            <name>SPRL BIGUP</name>
-            <address>RUE LONGUE 93 1320 BEAUVECHAIN</address>
-          </checkVatResponse>
-        </soap:Body>
-      </soap:Envelope>
+      <env:Envelope xmlns:env="http://schemas.xmlsoap.org/soap/envelope/">
+        <env:Body>
+          <ns2:checkVatResponse xmlns:ns2="urn:ec.europa.eu:taxud:vies:services:checkVat:types">
+            <ns2:countryCode>BE</ns2:countryCode>
+            <ns2:vatNumber>0829071668</ns2:vatNumber>
+            <ns2:requestDate>2016-01-16+01:00</ns2:requestDate>
+            <ns2:valid>true</ns2:valid>
+            <ns2:name>SPRL BIGUP</ns2:name>
+            <ns2:address>RUE LONGUE 93 1320 BEAUVECHAIN</ns2:address>
+          </ns2:checkVatResponse>
+        </env:Body>
+      </env:Envelope>
       """
 
       expected = %{
@@ -66,18 +66,18 @@ defmodule ExVatcheck.VIESClient.XMLParserTest do
 
     test "parses the XML response for invalid VAT identifcation number" do
       response = """
-      <soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
-        <soap:Body>
-          <checkVatResponse xmlns="urn:ec.europa.eu:taxud:vies:services:checkVat:types">
-            <countryCode>BE</countryCode>
-            <vatNumber>123123123</vatNumber>
-            <requestDate>2016-01-16+01:00</requestDate>
-            <valid>false</valid>
-            <name>---</name>
-            <address>---</address>
-          </checkVatResponse>
-        </soap:Body>
-      </soap:Envelope>
+      <env:Envelope xmlns:env="http://schemas.xmlsoap.org/soap/envelope/">
+        <env:Body>
+          <ns2:checkVatResponse xmlns:ns2="urn:ec.europa.eu:taxud:vies:services:checkVat:types">
+            <ns2:countryCode>BE</ns2:countryCode>
+            <ns2:vatNumber>123123123</ns2:vatNumber>
+            <ns2:requestDate>2016-01-16+01:00</ns2:requestDate>
+            <ns2:valid>false</ns2:valid>
+            <ns2:name>---</ns2:name>
+            <ns2:address>---</ns2:address>
+          </ns2:checkVatResponse>
+        </env:Body>
+      </env:Envelope>
       """
 
       expected = %{
@@ -94,18 +94,18 @@ defmodule ExVatcheck.VIESClient.XMLParserTest do
 
     test "correctly keeps nil values when present in checkVat response" do
       response = """
-      <soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
-        <soap:Body>
-          <checkVatResponse xmlns="urn:ec.europa.eu:taxud:vies:services:checkVat:types">
-            <countryCode>BG</countryCode>
-            <vatNumber>451158821</vatNumber>
-            <requestDate>2016-01-16+01:00</requestDate>
-            <valid>false</valid>
-            <name></name>
-            <address></address>
-          </checkVatResponse>
-        </soap:Body>
-      </soap:Envelope>
+      <env:Envelope xmlns:env="http://schemas.xmlsoap.org/soap/envelope/">
+        <env:Body>
+          <ns2:checkVatResponse xmlns:ns2="urn:ec.europa.eu:taxud:vies:services:checkVat:types">
+            <ns2:countryCode>BG</ns2:countryCode>
+            <ns2:vatNumber>451158821</ns2:vatNumber>
+            <ns2:requestDate>2016-01-16+01:00</ns2:requestDate>
+            <ns2:valid>false</ns2:valid>
+            <ns2:name></ns2:name>
+            <ns2:address></ns2:address>
+          </ns2:checkVatResponse>
+        </env:Body>
+      </env:Envelope>
       """
 
       expected = %{
@@ -122,18 +122,18 @@ defmodule ExVatcheck.VIESClient.XMLParserTest do
 
     test "gracefully handles unexpected date formats" do
       response = """
-      <soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
-        <soap:Body>
-          <checkVatResponse xmlns="urn:ec.europa.eu:taxud:vies:services:checkVat:types">
-            <countryCode>BG</countryCode>
-            <vatNumber>451158821</vatNumber>
-            <requestDate>2016-01</requestDate>
-            <valid>false</valid>
-            <name></name>
-            <address></address>
-          </checkVatResponse>
-        </soap:Body>
-      </soap:Envelope>
+      <env:Envelope xmlns:env="http://schemas.xmlsoap.org/soap/envelope/">
+        <env:Body>
+          <ns2:checkVatResponse xmlns:ns2="urn:ec.europa.eu:taxud:vies:services:checkVat:types">
+            <ns2:countryCode>BG</ns2:countryCode>
+            <ns2:vatNumber>451158821</ns2:vatNumber>
+            <ns2:requestDate>2016-01</ns2:requestDate>
+            <ns2:valid>false</ns2:valid>
+            <ns2:name></ns2:name>
+            <ns2:address></ns2:address>
+          </ns2:checkVatResponse>
+        </env:Body>
+      </env:Envelope>
       """
 
       expected = %{
@@ -150,13 +150,13 @@ defmodule ExVatcheck.VIESClient.XMLParserTest do
 
     test "gracefully handles when VIES service unavailable" do
       fault = """
-        <soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
-          <soap:Body>
-            <soap:Fault>
+        <env:Envelope xmlns:env="http://schemas.xmlsoap.org/soap/envelope/">
+          <env:Body>
+            <env:Fault>
               <faultstring>MS_UNAVAILABLE</faultstring>
-            </soap:Fault>
-          </soap:Body>
-        </soap:Envelope>
+            </env:Fault>
+          </env:Body>
+        </env:Envelope>
       """
 
       assert XMLParser.parse_response(fault) == {:error, "Service unavailable"}
@@ -164,16 +164,36 @@ defmodule ExVatcheck.VIESClient.XMLParserTest do
 
     test "gracefully handles unexpected errors from the VIES service" do
       fault = """
-        <soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
+        <env:Envelope xmlns:env="http://schemas.xmlsoap.org/soap/envelope/">
+          <env:Body>
+            <env:Fault>
+              <faultstring>UNKNOWN_ERROR</faultstring>
+            </env:Fault>
+          </env:Body>
+        </env:Envelope>
+      """
+
+      assert XMLParser.parse_response(fault) == {:error, "Unknown error: UNKNOWN_ERROR"}
+    end
+
+    test "gracefully handles unexpected XML parsing errors from the VIES service" do
+      unexpected_namespaces = """
+        <soap:Envelope xmlns:env="http://schemas.xmlsoap.org/soap/envelope/">
           <soap:Body>
-            <soap:Fault>
-              <faultstring>XML_ERROR</faultstring>
-            </soap:Fault>
+            <ns1:checkVatResponse xmlns:ns1="urn:ec.europa.eu:taxud:vies:services:checkVat:types">
+              <ns1:countryCode>BG</ns1:countryCode>
+              <ns1:vatNumber>451158821</ns1:vatNumber>
+              <ns1:requestDate>2016-01</ns1:requestDate>
+              <ns1:valid>false</ns1:valid>
+              <ns1:name></ns1:name>
+              <ns1:address></ns1:address>
+            </ns1:checkVatResponse>
           </soap:Body>
         </soap:Envelope>
       """
 
-      assert XMLParser.parse_response(fault) == {:error, "Unknown error: XML_ERROR"}
+      assert XMLParser.parse_response(unexpected_namespaces) ==
+               {:error, "Unknown error: XML_ERROR"}
     end
   end
 end

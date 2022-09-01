@@ -1,3 +1,16 @@
+#### 0.3.1 (2022-08-31)
+
+##### Bug Fixes
+
+* Fixes change to business name fetched in the smoke test.
+
+#### 0.3.0 (2022-08-31)
+
+##### Breaking Bug Fixes
+
+* Updates XML parsing logic to work with new VIES SOAP envelope namespace changes.
+* Better error handling if `SweetXml.xpath` returns an error and parsing fails.
+
 #### 0.2.1 (2021-10-13)
 
 ##### Chores

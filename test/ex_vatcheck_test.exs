@@ -18,7 +18,7 @@ defmodule ExVatcheckTest do
 
   @invalid_vat_response %{
     country_code: "GB",
-    vat_number: "123123123",
+    vat_number: nil,
     request_date: "2016-01-16",
     valid: false,
     name: "---",
@@ -36,7 +36,7 @@ defmodule ExVatcheckTest do
         vies_response: @valid_vat_response
       }
 
-      stub(HTTPoison, :post, fn _, _ ->
+      stub(HTTPoison, :post, fn _, _, _ ->
         {:ok, %HTTPoison.Response{body: VIESResponses.valid_vat_response()}}
       end)
 
@@ -51,7 +51,7 @@ defmodule ExVatcheckTest do
         vies_response: @invalid_vat_response
       }
 
-      stub(HTTPoison, :post, fn _, _ ->
+      stub(HTTPoison, :post, fn _, _, _ ->
         {:ok, %HTTPoison.Response{body: VIESResponses.invalid_vat_response()}}
       end)
 
@@ -66,7 +66,7 @@ defmodule ExVatcheckTest do
         vies_response: %{error: "Service timed out"}
       }
 
-      stub(HTTPoison, :post, fn _, _ ->
+      stub(HTTPoison, :post, fn _, _, _ ->
         {:error, %HTTPoison.Error{reason: :timeout}}
       end)
 
@@ -85,7 +85,7 @@ defmodule ExVatcheckTest do
         vies_response: @invalid_vat_response
       }
 
-      stub(HTTPoison, :post, fn _, _ ->
+      stub(HTTPoison, :post, fn _, _, _ ->
         {:ok, %HTTPoison.Response{body: VIESResponses.invalid_vat_response()}}
       end)
 
@@ -101,7 +101,7 @@ defmodule ExVatcheckTest do
                vies_response: %{
                  address: "Tobelbader Straße 30\nAT-8141 Premstätten",
                  country_code: "AT",
-                 name: "ams AG",
+                 name: "ams-OSRAM AG",
                  request_date: _date,
                  valid: true,
                  vat_number: "U28560205"

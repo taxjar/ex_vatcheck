@@ -55,7 +55,7 @@ defmodule ExVatcheck.VIESClientTest do
         address: "BC0 B1 D1 BROADCAST CENTRE\nWHITE CITY PLACE\n201 WOOD LANE\nLONDON\n\nW12 7TP"
       }
 
-      stub(HTTPoison, :post, fn _, _ ->
+      stub(HTTPoison, :post, fn _, _, _ ->
         {:ok, %HTTPoison.Response{body: VIESResponses.valid_vat_response()}}
       end)
 
@@ -67,24 +67,34 @@ defmodule ExVatcheck.VIESClientTest do
 
       expected = %{
         country_code: "GB",
-        vat_number: "123123123",
+        vat_number: nil,
         request_date: "2016-01-16",
         valid: false,
         name: "---",
         address: "---"
       }
 
-      stub(HTTPoison, :post, fn _, _ ->
+      stub(HTTPoison, :post, fn _, _, _ ->
         {:ok, %HTTPoison.Response{body: VIESResponses.invalid_vat_response()}}
       end)
 
       assert VIESClient.check_vat(client, "GB", "123123123") == {:ok, expected}
     end
 
+    test "handles invalid VAT response if ExVatcheck validation misses it" do
+      client = %VIESClient{url: VIESResponses.service_url()}
+
+      stub(HTTPoison, :post, fn _, _, _ ->
+        {:ok, %HTTPoison.Response{body: VIESResponses.invalid_input_fault_response()}}
+      end)
+
+      assert VIESClient.check_vat(client, "ZZ", "123") == {:error, "Unknown error: INVALID_INPUT"}
+    end
+
     test "gracefully handles error due to unavailable VIES service" do
       client = %VIESClient{url: VIESResponses.service_url()}
 
-      stub(HTTPoison, :post, fn _, _ ->
+      stub(HTTPoison, :post, fn _, _, _ ->
         {:ok, %HTTPoison.Response{body: VIESResponses.service_unavailable_response()}}
       end)
 
@@ -94,7 +104,7 @@ defmodule ExVatcheck.VIESClientTest do
     test "gracefully handles VIES service timeouts" do
       client = %VIESClient{url: VIESResponses.service_url()}
 
-      stub(HTTPoison, :post, fn _, _ ->
+      stub(HTTPoison, :post, fn _, _, _ ->
         {:error, %HTTPoison.Error{id: nil, reason: :timeout}}
       end)
 
