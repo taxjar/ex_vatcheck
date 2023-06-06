@@ -28,13 +28,13 @@ defmodule ExVatcheck.MixProject do
 
   defp deps do
     [
-      {:httpoison, "~> 1.3"},
+      {:httpoison, "~> 2.0"},
       {:sweet_xml, "~> 0.7"},
       # dev/test/tools
-      {:credo, "~> 1.0", only: [:dev, :test], runtime: false},
-      {:dialyxir, "~> 0.5", only: :dev, runtime: false},
-      {:ex_doc, "~> 0.19", only: :dev, runtime: false},
-      {:mimic, "~> 0.2", only: :test}
+      {:credo, "~> 1.7", only: [:dev, :test], runtime: false},
+      {:dialyxir, "~> 1.3", only: :dev, runtime: false},
+      {:ex_doc, "~> 0.27", only: :dev, runtime: false},
+      {:mimic, "~> 1.7", only: :test}
     ]
   end
 
