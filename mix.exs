@@ -5,7 +5,7 @@ defmodule ExVatcheck.MixProject do
     [
       app: :ex_vatcheck,
       version: "0.3.1",
-      elixir: "~> 1.6",
+      elixir: "~> 1.14",
       name: "ExVatcheck",
       elixirc_paths: elixirc_paths(Mix.env()),
       description: "An Elixir package for verifying VAT identification numbers.",
