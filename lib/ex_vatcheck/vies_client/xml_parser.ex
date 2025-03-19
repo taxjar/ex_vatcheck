@@ -114,7 +114,7 @@ defmodule ExVatcheck.VIESClient.XMLParser do
       country_code: format_field(body.country_code),
       vat_number: format_field(body.vat_number),
       request_date: body.request_date |> format_field() |> format_date(),
-      valid: body.valid == 'true',
+      valid: body.valid == ~c"true",
       name: format_field(body.name),
       address: format_field(body.address)
     }
