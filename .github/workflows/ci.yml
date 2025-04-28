@@ -20,18 +20,18 @@ jobs:
         apk update
         apk upgrade
         apk add --no-cache make bash zlib openssl openssh git g++ wget curl ca-certificates
-    - uses: actions/checkout@v1
-    - uses: actions/cache@v1
+    - uses: actions/checkout@v4
+    - uses: actions/cache@v4
       name: "Cache Mix"
       with:
         path: ~/.mix
         key: ${{ runner.os }}-mix-${{ hashFiles('.tool-versions') }}
-    - uses: actions/cache@v1
+    - uses: actions/cache@v4
       name: "Cache Hex"
       with:
         path: ~/.hex
         key: ${{ runner.os }}-hex-${{ hashFiles('.tool-versions') }}
-    - uses: actions/cache@v1
+    - uses: actions/cache@v4
       name: "Cache Dependencies"
       with:
         path: deps
